@@ -26,6 +26,22 @@ public class SavingAccount extends Account {
                     "Накопительная ставка не может быть отрицательной, а у вас: " + rate
             );
         }
+        if (initialBalance < 0) {
+            throw new IllegalArgumentException(
+                    "Начальный баланс не может быть отрицательным, а у вас: " + initialBalance
+            );
+        }
+
+        if (minBalance > maxBalance) {
+            throw new IllegalArgumentException(
+                    "Минимальный баланс не может быть больше чем максимальный баланс"
+            );
+        }
+        if (initialBalance < minBalance) {
+            throw new IllegalArgumentException(
+                    "Начальный баланс не может быть меньше чем минимальный баланс"
+            );
+        }
         this.balance = initialBalance;
         this.minBalance = minBalance;
         this.maxBalance = maxBalance;
@@ -59,8 +75,8 @@ public class SavingAccount extends Account {
      * завершиться вернув false и ничего не поменяв на счёте.
      *
      * @param amount - сумма пополнения
-     * @param amount
      * @return true если операция прошла успешно, false иначе.
+     * @param amount
      * @return
      */
     @Override
@@ -68,8 +84,8 @@ public class SavingAccount extends Account {
         if (amount <= 0) {
             return false;
         }
-        if (balance + amount < maxBalance) {
-            balance = amount;
+        if (balance + amount <= maxBalance) {
+            balance += amount;
             return true;
         } else {
             return false;
