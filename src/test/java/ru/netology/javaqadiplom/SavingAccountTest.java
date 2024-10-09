@@ -25,6 +25,50 @@ public class SavingAccountTest {
                 new SavingAccount(-100, 100, 250, 5));
     }
 
+    //1
+    //Тестируем негативный сценарий с возвращением IllegalArgumentException
+    //когда MinBalance и MaxBalance меньше 0
+    @Test
+    public void negativeMinBalanceAndMaxBalanceLessZero() {
+
+        Assertions.assertThrows(IllegalArgumentException.class, () ->
+                //new CreditAccount(0, 5_000, -15));
+                new SavingAccount(100, -100, -150, 5));
+    }
+
+    //2
+    //Тестируем негативный сценарий с возвращением IllegalArgumentException
+    //когда InitialBalance меньше MinBalance
+    @Test
+    public void negativeInitialBalanceLessMinBalance() {
+
+        Assertions.assertThrows(IllegalArgumentException.class, () ->
+                //new CreditAccount(0, 5_000, -15));
+                new SavingAccount(10, 50, 150, 5));
+    }
+
+    //3
+    //Тестируем негативный сценарий с возвращением IllegalArgumentException
+    //когда InitialBalance больше MaxBalance
+    @Test
+    public void negativeInitialBalanceOverMaxBalance() {
+
+        Assertions.assertThrows(IllegalArgumentException.class, () ->
+                //new CreditAccount(0, 5_000, -15));
+                new SavingAccount(250, 50, 150, 5));
+    }
+
+    //4
+    //Тестируем негативный сценарий с возвращением IllegalArgumentException
+    //когда Rate меньше нуля
+    @Test
+    public void negativeRateLessZero() {
+
+        Assertions.assertThrows(IllegalArgumentException.class, () ->
+                //new CreditAccount(0, 5_000, -15));
+                new SavingAccount(150, 50, 250, -5));
+    }
+
 
     @Test
     public void PayFalseForAmountEqZero() {
@@ -110,6 +154,38 @@ public class SavingAccountTest {
         boolean res = savingAccount.add(amount);
         int actual = savingAccount.balance;
         Assertions.assertEquals(expected, actual);
+    }
+
+    //
+
+    //Тестируем расчёт процентов на остаток счёта при условии, что
+    // счёт не меняется год
+    //initialBalance = 200, rate = 15
+    //значит согласно формуле balance / 100 * rate получаем 30
+    @Test
+    public void annualLoanDebt0() {
+        SavingAccount savingAccount = new SavingAccount(
+                200, 10, 300, 15
+        );
+
+        Assertions.assertEquals(30, savingAccount.yearChange());
+    }
+
+    //5
+    //Расчёт процентов на остаток счёта не исключен если со счёта было снятие (оплата)
+    //Тестируем расчёт процентов на остаток счёта при условии, что
+    // счёт меняется - выполняется пополение счёта
+    //initialBalance = 200, rate = 15 и пополнение на 200
+    //значит не выполняется расчёт процентов на остаток счёта по формуле balance / 100 * rate
+    @Test
+    public void annualLoanDebt() {
+        SavingAccount savingAccount = new SavingAccount(
+                200, 10, 300, 15
+        );
+
+        savingAccount.pay(100);
+
+        Assertions.assertEquals(0, savingAccount.yearChange());
     }
 
 
