@@ -31,7 +31,16 @@ public class SavingAccount extends Account {
                     "Начальный баланс не может быть отрицательным, а у вас: " + initialBalance
             );
         }
-
+        if (minBalance < 0) {
+            throw new IllegalArgumentException(
+                    "Минимальный баланс не может быть отрицательным, а у вас: " + minBalance
+            );
+        }
+        if (maxBalance < 0) {
+            throw new IllegalArgumentException(
+                    "Максимальный баланс не может быть отрицательным, а у вас: " + maxBalance
+            );
+        }
         if (minBalance > maxBalance) {
             throw new IllegalArgumentException(
                     "Минимальный баланс не может быть больше чем максимальный баланс"
@@ -39,7 +48,12 @@ public class SavingAccount extends Account {
         }
         if (initialBalance < minBalance) {
             throw new IllegalArgumentException(
-                    "Начальный баланс не может быть меньше чем минимальный баланс"
+                    "Начальный баланс не может быть меньше чем минимальный баланс, а у вас: " + initialBalance
+            );
+        }
+        if (initialBalance > maxBalance) {
+            throw new IllegalArgumentException(
+                    "Начальный баланс не может быть больше чем максимальный баланс, а у вас: " + initialBalance
             );
         }
         this.balance = initialBalance;
@@ -64,7 +78,11 @@ public class SavingAccount extends Account {
             return false;
         }
         balance = balance - amount;
-        return balance > minBalance;
+        if (balance > minBalance) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -75,8 +93,8 @@ public class SavingAccount extends Account {
      * завершиться вернув false и ничего не поменяв на счёте.
      *
      * @param amount - сумма пополнения
-     * @return true если операция прошла успешно, false иначе.
      * @param amount
+     * @return true если операция прошла успешно, false иначе.
      * @return
      */
     @Override
@@ -102,7 +120,11 @@ public class SavingAccount extends Account {
      */
     @Override
     public int yearChange() {
-        return balance / 100 * rate;
+        if (balance <= 0) {
+            return 0;
+        } else {
+            return balance / 100 * rate;
+        }
     }
 
     public int getMinBalance() {
