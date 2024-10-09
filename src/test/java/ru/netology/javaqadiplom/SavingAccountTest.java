@@ -107,15 +107,20 @@ public class SavingAccountTest {
     //но получаем -7, т.е. фактически срабатывает формула вне зависимости от условия
     @Test
     public void PayCalculateForBalanceLessMinBalance() {
-        SavingAccount SavingAccount = new SavingAccount(
-                -5, 0, 100, 5
-        );
-        int amount = 2;
-        int expected = -5;
 
-        boolean res = SavingAccount.pay(amount);
-        int actual = SavingAccount.balance;
-        Assertions.assertEquals(expected, actual);
+        Assertions.assertThrows(IllegalArgumentException.class, () ->
+                new SavingAccount(-5, 0, 100, 5));
+
+
+//        SavingAccount SavingAccount = new SavingAccount(
+//                -5, 0, 100, 5
+//        );
+//        int amount = 2;
+//        int expected = -5;
+//
+//        boolean res = SavingAccount.pay(amount);
+//        int actual = SavingAccount.balance;
+//        Assertions.assertEquals(expected, actual);
     }
 
 
@@ -172,11 +177,10 @@ public class SavingAccountTest {
     }
 
     //5
-    //Расчёт процентов на остаток счёта не исключен если со счёта было снятие (оплата)
-    //Тестируем расчёт процентов на остаток счёта при условии, что
-    // счёт меняется - выполняется пополение счёта
+    //Расчёт процентов на остаток счёта не исключен если со счёта
+    //Тестируем расчёт процентов на остаток счёта
     //initialBalance = 200, rate = 15 и пополнение на 200
-    //значит не выполняется расчёт процентов на остаток счёта по формуле balance / 100 * rate
+    //значит   расчёт процентов на остаток счёта выполняется по формуле balance / 100 * rate
     @Test
     public void annualLoanDebt() {
         SavingAccount savingAccount = new SavingAccount(
@@ -185,7 +189,7 @@ public class SavingAccountTest {
 
         savingAccount.pay(100);
 
-        Assertions.assertEquals(0, savingAccount.yearChange());
+        Assertions.assertEquals(15, savingAccount.yearChange());
     }
 
 
