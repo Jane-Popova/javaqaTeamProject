@@ -36,7 +36,6 @@ public class CreditAccount extends Account {
         }
 
 
-
         this.balance = initialBalance;
         this.creditLimit = creditLimit;
         this.rate = rate;
@@ -99,11 +98,9 @@ public class CreditAccount extends Account {
     @Override
     public int yearChange() {
 
-        if (balance<0) {
+        if (balance < 0) {
             return balance / 100 * rate;
-        }
-        else
-        {
+        } else {
             return 0;
         }
     }
